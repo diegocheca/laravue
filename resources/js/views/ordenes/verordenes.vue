@@ -5,8 +5,14 @@
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
+      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+        {{ $t('table.export') }}
+      </el-button>
+      <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('table.porcentaje') }}
+      </el-checkbox>
     </div>
-    <el-table v-loading="loading" :data="list" border fit highlight-current-row>
+    <el-table :key="tableKey" v-loading="loading" :data="list" border fit highlight-current-row>
       <el-table-column align="center" label="id " width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -29,7 +35,11 @@
           <span>{{ scope.row.idtecnico }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column v-if="showporcentaje" label="Porcentaje" width="110px" align="center">
+        <template slot-scope="scope">
+          <span style="color:red;">{{ scope.row.porcent }}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="description">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
@@ -60,6 +70,9 @@
           </el-button>
           <el-button type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.description, scope.row.direccion , scope.row.idcliente);">
             Delete
+          </el-button>
+          <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row,100)">
+            {{ $t('table.completar') }}
           </el-button>
         </template>
       </el-table-column>
@@ -106,6 +119,8 @@
 
 <script>
 import Resource from '@/api/resource';
+import waves from '@/directive/waves'; // Waves directive
+import { parseTime } from '@/utils';
 const ordenesResource = new Resource('ordendetrabajo');
 const tipos_de_estado = [
   { key: '1', display_name: 'En Proceso' },
@@ -116,6 +131,7 @@ const tipos_de_estado = [
 
 export default {
   name: 'OrdenesTrabajaoList',
+  directives: { waves },
   filters: {
     statusFilter(estado) {
       const statusMap = {
@@ -130,11 +146,14 @@ export default {
   data() {
     return {
       list: [],
+      tableKey: 0,
       formTitle: '',
       tipos_de_estado,
       loading: true,
       ordenesFormVisible: false,
       currentOrden: {},
+      downloadLoading: false,
+      showporcentaje: false,
     };
   },
   created() {
@@ -162,10 +181,11 @@ export default {
             duration: 5 * 1000,
           });
           this.getList();
+          this.ordenesFormVisible = false;
         }).catch(error => {
           console.log(error);
         }).finally(() => {
-          this.categoryFormVisible = false;
+          this.ordenesFormVisible = false;
         });
       } else { // crear nueva orden
         ordenesResource
@@ -200,6 +220,37 @@ export default {
         direccion: '',
         idcliente: '',
       };
+    },
+    handleDownload() {
+      this.downloadLoading = true;
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['id', 'descripcion', 'estado'];
+        const filterVal = ['id', 'description', 'estado'];
+        const data = this.formatJson(filterVal, this.list);
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: 'table12-list',
+        });
+        this.downloadLoading = false;
+      });
+    },
+    handleModifyStatus(row, status) {
+      alert('se completo la tarea');
+      // this.$message({
+      //   message: 'Successful operation',
+      //   type: 'success',
+      // });
+      // row.status = status;
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j]);
+        } else {
+          return v[j];
+        }
+      }));
     },
     handleDelete(id, name, dir, idcliente) {
       this.currentOrden = {

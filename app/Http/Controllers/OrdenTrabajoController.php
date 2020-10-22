@@ -23,7 +23,7 @@ class OrdenTrabajoController extends Controller
     public function ordenes_dashboard()
     {
         //
-        $ordenes = OrdenTrabajo::select('id','description','cliente','estado','porcent')->where('estado', '!=', 4)->get();
+        $ordenes = OrdenTrabajo::select('id','description','idcliente','estado','porcent')->where('estado', '!=', 4)->get();
 
         return response()->json($ordenes);
     }
