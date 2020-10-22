@@ -154,7 +154,7 @@ class OrdenTrabajoController extends Controller
     {
         //var_dump($id);
         try {
-            $note = OrdenTrabajo::where('OrdenTrabajo_Id', '=',  $id)->first(); // busco la orden de trabajo a actualizar
+            $note = OrdenTrabajo::find($id); // busco la orden de trabajo a actualizar
             $note->delete();
         } catch (\Exception $ex) {
             response()->json(['error' => $ex->getMessage()], 403);

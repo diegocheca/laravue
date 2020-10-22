@@ -9,7 +9,7 @@
         {{ $t('table.export') }}
       </el-button>
       <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.porcentaje') }}
+        {{ $t('table.Porcentaje') }}
       </el-checkbox>
     </div>
     <el-table :key="tableKey" v-loading="loading" :data="list" border fit highlight-current-row>
@@ -60,7 +60,6 @@
           <el-tag :type="scope.row.estado | statusFilter">
             {{ scope.row.estado }}
           </el-tag>
-          <!-- <span>{{ scope.row.estado }}</span> -->
         </template>
       </el-table-column>
       <el-table-column align="center" label="Actions" width="350">
@@ -72,7 +71,7 @@
             Delete
           </el-button>
           <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row,100)">
-            {{ $t('table.completar') }}
+            {{ $t('table.Porcentaje') }}
           </el-button>
         </template>
       </el-table-column>
