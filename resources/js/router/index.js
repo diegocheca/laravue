@@ -119,6 +119,75 @@ export const constantRoutes = [
     ],
   },
   {
+    path: '/foo',
+    component: Layout,
+    redirect: '/foo/index',
+    meta: {
+      title: 'foo', // This title will show on the breadcrumb before submenu's title
+      icon: 'star', // Use star icon
+    },
+    children: [
+      {
+        path: 'index', // When clicking this submenu, it will redirect to /#/foo/index
+        component: () => import('@/views/foo/Foo.vue'),
+        name: 'foo',
+        icon: 'star', // Use star icon
+        meta: {
+          title: 'foo',
+          icon: 'admin',
+        }, // foo submenu
+      },
+      {
+        path: 'bar', // When clicking this submenu, it will redirect to /#/foo/bar
+        component: () => import('@/views/foo/Bar.vue'),
+        name: 'bar',
+        meta: {
+          title: 'bar',
+          icon: 'el-icon-info',
+        }, // bar submenu
+      },
+    ],
+  },
+  {
+    path: '/ordentrabajo',
+    component: Layout,
+    redirect: '/ordenes/index',
+    meta: {
+      title: 'Ordenes', // This title will show on the breadcrumb before submenu's title
+      icon: 'education', // Use star icon
+    },
+    children: [
+      {
+        path: 'index', // When clicking this submenu, it will redirect to /#/foo/index
+        component: () => import('@/views/ordenes/crear.vue'),
+        name: 'ordenes-crear',
+        icon: 'star', // Use star icon
+        meta: {
+          title: 'Crear Ordenes de Trabajo',
+          icon: 'admin',
+        }, // foo submenu
+      },
+      {
+        path: 'lista-de-ordenes',
+        component: () => import('@/views/ordenes/listarordenes.vue'),
+        name: 'ListadeOrdenesss',
+        meta: {
+          title: 'Lista de Ordenes',
+          icon: 'table',
+        },
+      },
+      {
+        path: 'ordenes-nuevo',
+        component: () => import('@/views/ordenes/verordenes.vue'),
+        name: 'ListadeOrdenes',
+        meta: {
+          title: 'Ver Ordenes',
+          icon: 'table',
+        },
+      },
+    ],
+  },
+  {
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',

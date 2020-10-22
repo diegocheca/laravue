@@ -25,7 +25,7 @@
           <el-progress :percentage="70" />
         </div>
         <div class="progress-item">
-          <span>Vue</span>
+          <span>VueJS 2.7</span>
           <el-progress :percentage="18" />
         </div>
         <div class="progress-item">

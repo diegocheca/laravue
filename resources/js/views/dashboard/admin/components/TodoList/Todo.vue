@@ -1,13 +1,13 @@
 <template>
-  <li :class="{ completed: todo.done, editing: editing }" class="todo">
+  <li :class="{ completed: todo.OrdenTrabajo_Estado, editing: editing }" class="todo">
     <div class="view">
       <input
-        :checked="todo.done"
+        :checked="todo.OrdenTrabajo_Estado"
         class="toggle"
         type="checkbox"
         @change="toggleTodo( todo)"
       >
-      <label @dblclick="editing = true" v-text="todo.text" />
+      <label @dblclick="editing = true" v-text="todo.id + todo.text" />
       <button class="destroy" @click="deleteTodo( todo )" />
     </div>
     <input
@@ -49,7 +49,13 @@ export default {
   },
   methods: {
     deleteTodo(todo) {
-      this.$emit('deleteTodo', todo);
+      const orden_a_borrar = {
+        id: this.todo.id,
+        description: this.todo.text,
+        name: 'algo definido en el vuejs',
+        OrdenTrabajo_Estado: this.todo.OrdenTrabajo_Estado,
+      };
+      this.$emit('deleteTodo', orden_a_borrar);
     },
     editTodo({ todo, value }) {
       this.$emit('editTodo', { todo, value });

@@ -9,6 +9,8 @@ import router from '@/router';
 import i18n from './lang'; // Internationalization
 import '@/icons'; // icon
 import '@/permission'; // permission control
+// mis nuevas librerias-> third-party modules
+// import modals from  'vue-js-modal';
 
 import * as filters from './filters'; // global filters
 

@@ -20,6 +20,26 @@ export default {
       three: 'Three',
     },
   },
+  es: {
+    i18nView: {
+      title: 'Cambiar de Idioma',
+      note: 'The internationalization of this project is based on vue-i18n',
+      datePlaceholder: 'Elegir un dia',
+      selectPlaceholder: 'Seleccionar',
+      tableDate: 'Tabla de dias',
+      tableName: 'Nombre de tablas',
+      tableAddress: 'Tabla de direcciones',
+      default: 'Por defecto:',
+      primary: 'primario',
+      success: 'exitoso',
+      info: 'informacion',
+      warning: 'Aviso',
+      danger: 'peligro',
+      one: 'Uno',
+      two: 'Dos',
+      three: 'Tres',
+    },
+  },
   ru: {
     i18nView: {
       title: 'Сменить язык',

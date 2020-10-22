@@ -14,8 +14,8 @@
           :key="index"
           :todo="todo"
           @toggleTodo="toggleTodo"
-          @editTodo="editTodo"
-          @deleteTodo="deleteTodo"
+          @editTodo="editTodooooopp"
+          @deleteTodo="deleteTodoPadre"
         />
       </ul>
     </section>
@@ -39,22 +39,22 @@
 
 <script>
 import Todo from './Todo.vue';
-
+const axios = require('axios');
 const STORAGE_KEY = 'todos';
 const filters = {
-  all: todos => todos,
-  active: todos => todos.filter(todo => !todo.done),
-  completed: todos => todos.filter(todo => todo.done),
+  todas: todos => todos,
+  haciendo: todos => todos.filter(todo => todo.OrdenTrabajo_Estado === 0),
+  completas: todos => todos.filter(todo => todo.OrdenTrabajo_Estado === 1),
 };
 const defalutList = [
-  { text: 'star this repository', done: false },
-  { text: 'fork this repository', done: false },
-  { text: 'follow author', done: false },
-  { text: 'laravue', done: true },
-  { text: 'laravel', done: true },
-  { text: 'vue', done: true },
-  { text: 'axios', done: true },
-  { text: 'webpack', done: true },
+  { text: 'star this repository', done: false, OrdenTrabajo_Estado: 0, id: 1 },
+  { text: 'fork this repository', done: false, OrdenTrabajo_Estado: 0, id: 2 },
+  { text: 'follow author', done: false, OrdenTrabajo_Estado: 0, id: 3 },
+  { text: 'laravue', done: true, OrdenTrabajo_Estado: 1, id: 4 },
+  { text: 'laravel', done: true, OrdenTrabajo_Estado: 1, id: 5 },
+  { text: 'vue', done: true, OrdenTrabajo_Estado: 1, id: 6 },
+  { text: 'axios', done: true, OrdenTrabajo_Estado: 1, id: 7 },
+  { text: 'webpack', done: true, OrdenTrabajo_Estado: 1, id: 8 },
 ];
 export default {
   components: { Todo },
@@ -64,7 +64,8 @@ export default {
   },
   data() {
     return {
-      visibility: 'all',
+      ordenes_de_trabajo: [],
+      visibility: 'todas',
       filters,
       // todos: JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || defalutList
       todos: defalutList,
@@ -80,6 +81,9 @@ export default {
     remaining() {
       return this.todos.filter(todo => !todo.done).length;
     },
+  },
+  mounted: function() {
+    this.prueba();
   },
   methods: {
     setLocalStorage() {
@@ -97,14 +101,31 @@ export default {
       e.target.value = '';
     },
     toggleTodo(val) {
-      val.done = !val.done;
+      if (val.OrdenTrabajo_Estado === 1){
+        val.OrdenTrabajo_Estado = 0;
+      } else {
+        val.OrdenTrabajo_Estado = 1;
+      }
       this.setLocalStorage();
     },
-    deleteTodo(todo) {
-      this.todos.splice(this.todos.indexOf(todo), 1);
-      this.setLocalStorage();
+    deleteTodoPadre(orden_a_borrar) {
+      axios.post('/updateOrdenTrabajodashboard', {
+        name: orden_a_borrar.description,
+        description: orden_a_borrar.name,
+        id: orden_a_borrar.id,
+      })
+        .then(function(response) {
+          console.log('respuesta correcta desde el servidor al actualizar orden');
+          console.log(response.data);
+        })
+        .catch(function(error) {
+          console.log('catch del error');
+          console.log(error.data);
+        });
     },
-    editTodo({ todo, value }) {
+    editTodooooopp({ todo, value }) {
+      console.log('hola desde el padre');
+      console.log(todo);
       todo.text = value;
       this.setLocalStorage();
     },
@@ -117,6 +138,19 @@ export default {
         todo.done = done;
         this.setLocalStorage();
       });
+    },
+    prueba() {
+      const url = 'http://localhost:8000/ordenesdashboard';
+      axios.get(url, { headers: { 'Content-Type': 'application/json' }})
+        .then((response) => {
+          this.ordenes_de_trabajo = response.data;
+          console.log(this.ordenes_de_trabajo);
+        })
+        .catch(function(error) {
+          // handle error
+          console.log('NO traje ordenes error:');
+          console.log(error);
+        });
     },
   },
 };

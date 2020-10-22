@@ -1,0 +1,55 @@
+creando nueva tabla
+pasos que hice con orden de trabajo:
+ 1 - php artisan make:model OrdenTrabajo --migration --resource --controller
+ 2 - importe la table con contenido desde phpmyadmin
+ 3 - actualice el codigo de las migraciones
+ 4 - routes en api
+ 5- crear funciones en el controller: create, update, show, index,etc
+ 6 - actualizar el model
+ 7 - crear el factory: php artisan make:factory OrdenTrabajoFactory --model=OrdenTrabajo
+ 9 - completar el Factory
+ 10- probar por direccion
+ 11 - probar en component
+
+
+
+ --- instalando librerias de vuejs
+
+ 1. buscar la libreria en internet
+ 2 yarn install vue-count-to --save-dev
+    (add --save-dev will automatically add devDependencies to package.json)
+3. hay dos opciones:
+    global registration:
+        en app.js poner:
+
+        import countTo from 'vue-count-to'
+        Vue.component('countTo', countTo)
+
+        donde: import 1-countTo from 2'vue-count-to'
+                3Vue.component(4'countTo', 5countTo)
+
+                1- nombre q invento parecido al de la libreria
+                2 - lo que se puso solo en el packjson al correr el comando
+                3 - va asi
+                4 - el nombre del nuevo componter. como lov yo a llamar desde ahora adentro de los compontents
+                5 - tiene q se el 1
+
+
+    local registration:
+    <template>
+        <countTo :startVal='startVal' :endVal='endVal' :duration='3000'></countTo>
+        </template>
+
+        <script>
+        import countTo from 'vue-count-to';
+        export default {
+        components: { countTo },
+        data () {
+            return {
+            startVal: 0,
+            endVal: 2017
+            }
+        }
+        }
+        </script>
+

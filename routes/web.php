@@ -20,3 +20,6 @@ Route::get('/', function () {
 Route::group(['middleware' => 'web'], function () {
     Route::get(env('LARAVUE_PATH'), 'LaravueController@index')->where('any', '.*')->name('laravue');
 });
+Route::get('/ordentrabajo', 'OrdenTrabajoController@all')->name('ordentrabajo.all');
+Route::get('/ordenesdashboard', 'OrdenTrabajoController@ordenes_dashboard')->name('ordentrabajo.ordenes_dashboard');
+Route::post('/updateOrdenTrabajodashboard','OrdenTrabajoController@updatesdesdedash');

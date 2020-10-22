@@ -33,6 +33,7 @@ Route::namespace('Api')->group(function() {
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
         Route::apiResource('permissions', 'PermissionController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
+       
 
         // Custom routes
         Route::put('users/{user}', 'UserController@update');
@@ -147,3 +148,14 @@ Route::get('articles/{id}/pageviews', function ($id) {
 
     return response()->json(new JsonResponse(['pvData' => $data]));
 });
+
+
+// ordenes de trabajo
+Route::apiResource('ordendetrabajo', 'OrdenTrabajoController');
+/*
+Route::get('/ordentrabajo', 'OrdenTrabajoController@all')->name('ordentrabajo.all');
+Route::post('/ordentrabajo', 'OrdenTrabajoController@store')->name('ordentrabajo.store');
+Route::get('/ordentrabajo/{ordentrabajo}', 'OrdenTrabajoController@show')->name('ordentrabajo.show');
+Route::put('/ordentrabajo/{ordentrabajo}', 'OrdenTrabajoController@update')->name('ordentrabajo.update');
+Route::delete('/ordentrabajo/{ordentrabajo}', 'OrdenTrabajoController@destory')->name('ordentrabajo.destroy');
+*/
