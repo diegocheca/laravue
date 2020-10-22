@@ -67,7 +67,7 @@ class OrdenTrabajoController extends Controller
                 'direccion' => $params['direccion'],
                 'idcliente' => $params['idcliente'],
                 'idtecnico' => $params['idtecnico'],
-                'enddate' => $params['enddate'],
+                'enddate' => date("Y-m-d H:i:s", strtotime($params['enddate'])),
                 'estado' => $params['estado']
             ]);
             return new OrdenTrabajoResource($orden);
@@ -136,7 +136,7 @@ class OrdenTrabajoController extends Controller
                 $orden_a_actualizar->direccion = $params['direccion'];
                 $orden_a_actualizar->idcliente = $params['idcliente'];
                 $orden_a_actualizar->idtecnico = $params['idtecnico'];
-                $orden_a_actualizar->enddate = $params['enddate'];
+                $orden_a_actualizar->enddate = date("Y-m-d H:i:s", strtotime($params['enddate']));
                 $orden_a_actualizar->estado = $params['estado'];
                 $orden_a_actualizar->save(); // guardo los cambios
             }
