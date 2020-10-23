@@ -1,6 +1,33 @@
 <!-- File: resources/js/views/categories/List.vue -->
 <template>
   <div class="app-container">
+    <count-to
+      ref="countTo"
+      :start-val="_startVal"
+      :end-val="_endVal"
+      :duration="_duration"
+      :decimals="_decimals"
+      :separator="_separator"
+      :prefix="_prefix"
+      :suffix="_suffix"
+      :autoplay="false"
+      class="example"
+    />
+    <count-to
+      ref="countTo1"
+      :start-val="_startVal"
+      :end-val="_endVal"
+      :duration="_duration"
+      :decimals="_decimals"
+      :separator="_separator"
+      :prefix="_prefix"
+      :suffix="_suffix"
+      :autoplay="false"
+      class="example"
+    />
+    <div class="startBtn example-btn" @click="start">
+      Start
+    </div>
     <div class="filter-container">
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
@@ -10,6 +37,12 @@
       </el-button>
       <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.Porcentaje') }}
+      </el-checkbox>
+      <el-checkbox v-model="showestado" label="estado" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('table.Estado') }}
+      </el-checkbox>
+      <el-checkbox v-model="showtecnico" label="tecnico" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('table.Tecnico') }}
       </el-checkbox>
     </div>
     <el-table :key="tableKey" v-loading="loading" :data="list" border fit highlight-current-row>
@@ -30,7 +63,7 @@
           <span>{{ scope.row.idcliente }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="idtecnico" width="200">
+      <el-table-column v-if="showtecnico" align="center" label="idtecnico" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.idtecnico }}</span>
         </template>
@@ -55,7 +88,7 @@
           <span>{{ scope.row.enddate }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="estado">
+      <el-table-column v-if="showestado" align="center" label="estado">
         <template slot-scope="scope">
           <el-tag :type="scope.row.estado | statusFilter">
             {{ scope.row.estado }}
@@ -70,8 +103,8 @@
           <el-button type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.description, scope.row.direccion , scope.row.idcliente);">
             Delete
           </el-button>
-          <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row,100)">
-            {{ $t('table.Porcentaje') }}
+          <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row.id)">
+            {{ $t('table.EndTask') }}
           </el-button>
         </template>
       </el-table-column>
@@ -120,6 +153,8 @@
 import Resource from '@/api/resource';
 import waves from '@/directive/waves'; // Waves directive
 import { parseTime } from '@/utils';
+import countTo from 'vue-count-to';
+
 const ordenesResource = new Resource('ordendetrabajo');
 const tipos_de_estado = [
   { key: '1', display_name: 'En Proceso' },
@@ -130,6 +165,7 @@ const tipos_de_estado = [
 
 export default {
   name: 'OrdenesTrabajaoList',
+  components: { countTo },
   directives: { waves },
   filters: {
     statusFilter(estado) {
@@ -154,7 +190,66 @@ export default {
       OrdenActualizando: {},
       downloadLoading: false,
       showporcentaje: false,
+      showtecnico: false,
+      showestado: true,
+      setStartVal: 0,
+      setEndVal: 2017,
+      setDuration: 4000,
+      setDecimals: 0,
+      setSeparator: ',',
+      setSuffix: ' per capita',
+      setPrefix: '$ ',
+      paused: true,
+      resumeLabel: 'Resume',
+      pauseLabel: 'Pause',
+      temporal: 'dd',
     };
+  },
+  computed: {
+    _startVal() {
+      if (this.setStartVal) {
+        return this.setStartVal;
+      } else {
+        return 0;
+      }
+    },
+    _endVal() {
+      if (this.setEndVal) {
+        return this.setEndVal;
+      } else {
+        return 0;
+      }
+    },
+    _duration() {
+      if (this.setDuration) {
+        return this.setDuration;
+      } else {
+        return 100;
+      }
+    },
+    _decimals() {
+      if (this.setDecimals) {
+        if (this.setDecimals < 0 || this.setDecimals > 20) {
+          alert('digits argument must be between 0 and 20');
+          return 0;
+        }
+        return this.setDecimals;
+      } else {
+        return 0;
+      }
+    },
+    _separator() {
+      return this.setSeparator;
+    },
+    _suffix() {
+      return this.setSuffix;
+    },
+    _prefix() {
+      return this.setPrefix;
+    },
+    _pauseResumeLabel() {
+      return this.paused ? this.resumeLabel : this.pauseLabel;
+    },
   },
   created() {
     this.getList();
@@ -264,8 +359,23 @@ export default {
         this.downloadLoading = false;
       });
     },
-    handleModifyStatus(row, status) {
-      alert('se completo la tarea');
+    handleModifyStatus(id) {
+      // actualizo la base de datos
+      this.currentOrden = this.list.find(ordenes => ordenes.id === id);
+      this.currentOrden.porcent = 100;
+      ordenesResource.update(id, this.currentOrden).then(response => {
+        this.$message({
+          type: 'success',
+          message: 'La orden ha se completó al 100%',
+          duration: 5 * 1000,
+        });
+        this.getList();
+        this.ordenesFormVisible = false;
+      }).catch(error => {
+        console.log(error);
+      }).finally(() => {
+        this.ordenesFormVisible = false;
+      });
       // this.$message({
       //   message: 'Successful operation',
       //   type: 'success',
@@ -280,6 +390,10 @@ export default {
           return v[j];
         }
       }));
+    },
+    start() {
+      this.$refs.countTo.start();
+      this.paused = false;
     },
     handleDelete(id, name, dir, idcliente) {
       this.currentOrden = {
