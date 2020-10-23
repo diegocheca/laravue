@@ -147,6 +147,9 @@ export default {
     keyword: 'Keyword',
     role: 'Role',
     Porcentaje: 'Porcentaje',
+    Estado: 'Estado',
+    Tecnico: 'Tecnico',
+    EndTask: 'Terminar',
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

@@ -136,6 +136,8 @@ class OrdenTrabajoController extends Controller
                 $orden_a_actualizar->direccion = $params['direccion'];
                 $orden_a_actualizar->idcliente = $params['idcliente'];
                 $orden_a_actualizar->idtecnico = $params['idtecnico'];
+                $orden_a_actualizar->porcent = $params['porcent'];
+                $orden_a_actualizar->startdate = date("Y-m-d H:i:s", strtotime($params['startdate']));
                 $orden_a_actualizar->enddate = date("Y-m-d H:i:s", strtotime($params['enddate']));
                 $orden_a_actualizar->estado = $params['estado'];
                 $orden_a_actualizar->save(); // guardo los cambios
