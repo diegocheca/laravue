@@ -184,6 +184,7 @@ export default {
         'observacion': this.currentOrden.observacion,
         'porcent': this.currentOrden.porcent,
         'startdate': this.currentOrden.startdate,
+        'enddate': this.currentOrden.enddate,
         'updated_at': this.currentOrden.updated_at,
       };
       console.log('la copia:');
@@ -208,14 +209,23 @@ export default {
         });
       } else { // crear nueva orden
         ordenesResource
-          .store(this.currentOrden)
+          .store(this.OrdenActualizando)
           .then(response => {
             this.$message({
-              message: 'Se creó la tarea: ' + this.currentOrden.description + ', correctamente. Gracias',
+              message: 'Se creó la tarea: ' + this.OrdenActualizando.description + ', correctamente. Gracias',
               type: 'success',
               duration: 5 * 1000,
             });
             this.currentOrden = {
+              description: '',
+              direccion: '',
+              idcliente: '',
+              idtecnico: '',
+              startdate: '',
+              enddate: '',
+              estado: '',
+            };
+            this.OrdenActualizando = {
               description: '',
               direccion: '',
               idcliente: '',
