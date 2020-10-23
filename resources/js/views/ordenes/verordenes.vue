@@ -78,27 +78,27 @@
     </el-table>
     <el-dialog :title="formTitle" :visible.sync="ordenesFormVisible">
       <div class="form-container">
-        <el-form ref="categoryForm" :model="currentOrden" label-position="left" label-width="150px" style="max-width: 500px;">
+        <el-form ref="categoryForm" :model="OrdenActualizando" label-position="left" label-width="150px" style="max-width: 500px;">
           <el-form-item label="Tarea" prop="description">
-            <el-input v-model="currentOrden.description" />
+            <el-input v-model="OrdenActualizando.description" />
           </el-form-item>
           <el-form-item label="Direccion" prop="direccion">
-            <el-input v-model="currentOrden.direccion" />
+            <el-input v-model="OrdenActualizando.direccion" />
           </el-form-item>
           <el-form-item label="Id del Cliente" prop="idcliente">
-            <el-input v-model="currentOrden.idcliente" type="number" />
+            <el-input v-model="OrdenActualizando.idcliente" type="number" />
           </el-form-item>
           <el-form-item label="Id del Tecnico" prop="idtecnico">
-            <el-input v-model="currentOrden.idtecnico" type="number" />
+            <el-input v-model="OrdenActualizando.idtecnico" type="number" />
           </el-form-item>
           <el-form-item label="Fecha Inicio" prop="startdate">
-            <el-date-picker v-model="currentOrden.startdate" type="datetime" placeholder="Please pick a date" />
+            <el-date-picker v-model="OrdenActualizando.startdate" type="datetime" placeholder="Please pick a date" />
           </el-form-item>
           <el-form-item label="Fecha Fin" prop="enddate">
-            <el-date-picker v-model="currentOrden.enddate" type="datetime" placeholder="Please pick a date" />
+            <el-date-picker v-model="OrdenActualizando.enddate" type="datetime" placeholder="Please pick a date" />
           </el-form-item>
           <el-form-item label="Estado" prop="estado">
-            <el-select v-model="currentOrden.estado" class="filter-item" placeholder="Seleccionar el estado">
+            <el-select v-model="OrdenActualizando.estado" class="filter-item" placeholder="Seleccionar el estado">
               <el-option v-for="item in tipos_de_estado" :key="item.key" :label="item.display_name" :value="item.key" />
             </el-select>
           </el-form-item>
@@ -151,6 +151,7 @@ export default {
       loading: true,
       ordenesFormVisible: false,
       currentOrden: {},
+      OrdenActualizando: {},
       downloadLoading: false,
       showporcentaje: false,
     };
@@ -166,14 +167,33 @@ export default {
       this.loading = false;
     },
     handleEditForm(id) {
-      this.formTitle = 'Editando una Orden de trabajo';
+      this.formTitle = 'Editando una Orden de trabajo, con ID: ' + id;
       this.currentOrden = this.list.find(ordenes => ordenes.id === id);
+      this.OrdenActualizando = {
+        'color': this.currentOrden.color,
+        'created_at': this.currentOrden.created_at,
+        'deleted_at': this.currentOrden.deleted_at,
+        'description': this.currentOrden.description,
+        'direccion': this.currentOrden.direccion,
+        'estado': this.currentOrden.estado,
+        'id': this.currentOrden.id,
+        'idcliente': this.currentOrden.idcliente,
+        'idconexion': this.currentOrden.idconexion,
+        'idtecnico': this.currentOrden.idtecnico,
+        'newconexion': this.currentOrden.newconexion,
+        'observacion': this.currentOrden.observacion,
+        'porcent': this.currentOrden.porcent,
+        'startdate': this.currentOrden.startdate,
+        'updated_at': this.currentOrden.updated_at,
+      };
+      console.log('la copia:');
+      console.log(this.OrdenActualizando);
       this.ordenesFormVisible = true;
     },
     handleSubmit() {
-      if (this.currentOrden.id !== undefined) { // modificar orden
+      if (this.OrdenActualizando.id !== undefined) { // modificar orden
         console.log('por actualizar');
-        ordenesResource.update(this.currentOrden.id, this.currentOrden).then(response => {
+        ordenesResource.update(this.OrdenActualizando.id, this.OrdenActualizando).then(response => {
           this.$message({
             type: 'success',
             message: 'La orden ha sido actualizada correctamente',
