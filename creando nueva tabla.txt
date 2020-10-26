@@ -11,7 +11,45 @@ pasos que hice con orden de trabajo:
  10- probar por direccion
  11 - probar en component
 
+siguiendo varios dias despues:
+12 - correr: php artisan make:resource OrdenTrabajo
+13- crear la routes de la nueva api:   ponemos en el archivo rotues.api
+     Route::apiResource('ordendetrabajo', 'OrdenTrabajoController');
+     
 
+
+
+--ejemplo 2 - Materiales
+la tabla materiales tiene:
+id
+descripcion
+stock
+proveedor
+contactoProveedor
+observacion
+created_by
+updated_by
+deleted_by - null -  soft-delete
+
+pasos a seguir
+
+1 - hacer migrate
+php artisan make:migration create_materiales_table
+2 - php artisan run migrate
+o 
+alternativamente crear tabla con phpmyadmin
+3- crear model con : php artisan make:model Laravue\Models\Material
+4 - crear resorce: php artisan make:resource MaterialResource   
+el resource es para hablar con la base de datos directamante
+5 - crear controller: php artisan make:controller MaterialController --resource --model=Laravue\Models\Material
+6-  crear la linea de api en las routes,---> route/api agregar:  Route::apiResource('materiales', 'MaterialController');
+7 - agregar en el controller, la linea de uso de resorce:
+use App\Http\Resources\MaterialResource;
+8- modificar el index del controller para que devuelva todos los registros de la tabla
+public function index()
+    {
+        return MaterialResource::collection(Material::all());
+    }
 
  --- instalando librerias de vuejs
 
@@ -53,3 +91,16 @@ pasos que hice con orden de trabajo:
         }
         </script>
 
+
+
+
+
+
+
+
+
+-------------------------
+creando seed
+
+1
+    php artisan make:seeder OrdenesTrabajoSeeder
