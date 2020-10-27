@@ -50,6 +50,40 @@ public function index()
     {
         return MaterialResource::collection(Material::all());
     }
+9- seeding de la tabla, hay q crear un archivo seeding:
+    php artisan make:seeder MaterialesSeeder
+10- es rellenar de codigo de la function run del seeder.
+11- completar el model de laravel de la tabla q usamos , con los fillable and protected y softdeleted_at
+12 - crear direccion de vue , esto es un objeto js dentro del router/index.js
+13 - crear folder dentro de las views de js
+14 - crear el file con el nombre q se definio antes
+15 - probar el correcto funcionamiento de la vista mediante el menu de la izquierda
+16 - modifcamos el archivo del comonente de vue 
+17 - probamos los cambios desde el browser
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  --- instalando librerias de vuejs
 

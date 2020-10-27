@@ -188,6 +188,36 @@ export const constantRoutes = [
     ],
   },
   {
+    path: '/materiales',
+    component: Layout,
+    redirect: '/materiales/index',
+    meta: {
+      title: 'Materiales', // This title will show on the breadcrumb before submenu's title
+      icon: 'star', // Use star icon
+    },
+    children: [
+      {
+        path: 'index', // When clicking this submenu, it will redirect to /#/foo/index
+        component: () => import('@/views/ordenes/crear.vue'),
+        name: 'ordenes-crear',
+        icon: 'star', // Use star icon
+        meta: {
+          title: 'Crear Ordenes de Trabajo',
+          icon: 'admin',
+        }, // foo submenu
+      },
+      {
+        path: 'materiales-list',
+        component: () => import('@/views/materiales/listamateriales.vue'),
+        name: 'ListadeMateriales',
+        meta: {
+          title: 'Lista de Materiales',
+          icon: 'table',
+        },
+      },
+    ],
+  },
+  {
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
