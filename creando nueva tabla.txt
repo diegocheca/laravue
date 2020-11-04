@@ -60,6 +60,11 @@ public function index()
 15 - probar el correcto funcionamiento de la vista mediante el menu de la izquierda
 16 - modifcamos el archivo del comonente de vue 
 17 - probamos los cambios desde el browser
+18 - poner en la el script de la vista el reource donde busca datos
+19-  comprobar funcionamiento por consola de browser
+20 - modificar la talba y los nuevos valores
+21 - actualizar boton delete
+22 - modificar modal de crear nuevo materiales
  
 
 

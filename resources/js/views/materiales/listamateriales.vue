@@ -9,7 +9,7 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         {{ $t('table.export') }}
       </el-button>
-      <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+      <!-- <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.Porcentaje') }}
       </el-checkbox>
       <el-checkbox v-model="showestado" label="estado" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
@@ -17,7 +17,7 @@
       </el-checkbox>
       <el-checkbox v-model="showtecnico" label="tecnico" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.Tecnico') }}
-      </el-checkbox>
+      </el-checkbox> -->
     </div>
     <el-table :key="tableKey" v-loading="loading" :data="list" border fit highlight-current-row>
       <el-table-column align="center" label="id " width="80">
@@ -26,89 +26,86 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="direccion" width="200">
+      <el-table-column align="center" label="descripcion" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.direccion }}</span>
+          <span>{{ scope.row.descripcion }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Cliente" width="200">
+      <el-table-column align="center" label="stock" width="200">
         <template slot-scope="scope">
-          <span>{{ scope.row.idcliente }}</span>
+          <span>{{ scope.row.stock }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showtecnico" align="center" label="idtecnico" width="200">
+      <!-- <el-table-column v-if="showtecnico" align="center" label="idtecnico" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.idtecnico }}</span>
         </template>
-      </el-table-column>
-      <el-table-column v-if="showporcentaje" label="Porcentaje" width="110px" align="center">
+      </el-table-column> -->
+      <!-- <el-table-column v-if="showporcentaje" label="Porcentaje" width="110px" align="center">
         <template slot-scope="scope">
           <span style="color:red;">{{ scope.row.porcent }}</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center" label="description">
+      </el-table-column> -->
+      <el-table-column align="center" label="proveedor">
         <template slot-scope="scope">
-          <span>{{ scope.row.description }}</span>
+          <span>{{ scope.row.proveedor }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="startdate">
+      <el-table-column align="center" label="contactoproveedor">
         <template slot-scope="scope">
-          <span>{{ scope.row.startdate }}</span>
+          <span>{{ scope.row.contactoproveedor }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="enddate">
+      <el-table-column align="center" label="unidad">
         <template slot-scope="scope">
-          <span>{{ scope.row.enddate }}</span>
+          <span>{{ scope.row.unidad }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="showestado" align="center" label="estado">
+      <!-- <el-table-column v-if="showestado" align="center" label="estado">
         <template slot-scope="scope">
           <el-tag :type="scope.row.estado | statusFilter">
             {{ scope.row.estado }}
           </el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column align="center" label="Actions" width="350">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditForm(scope.row.id, scope.row.description);">
+          <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditForm(scope.row.id, scope.row.descripcion);">
             Edit
           </el-button>
-          <el-button type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.description, scope.row.direccion , scope.row.idcliente);">
+          <el-button type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.descripcion);">
             Delete
           </el-button>
-          <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row.id)">
+          <!-- <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row.id)">
             {{ $t('table.EndTask') }}
-          </el-button>
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :title="formTitle" :visible.sync="ordenesFormVisible">
       <div class="form-container">
         <el-form ref="categoryForm" :model="OrdenActualizando" label-position="left" label-width="150px" style="max-width: 500px;">
-          <el-form-item label="Tarea" prop="description">
-            <el-input v-model="OrdenActualizando.description" />
+          <el-form-item label="Material" prop="descripcion">
+            <el-input v-model="OrdenActualizando.descripcion" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="Direccion" prop="direccion">
-            <el-input v-model="OrdenActualizando.direccion" />
+          <el-form-item label="stock" prop="stock">
+            <el-input v-model="OrdenActualizando.stock" type="number" style="width: 100%;" />
           </el-form-item>
-          <el-form-item label="Id del Cliente" prop="idcliente">
-            <el-input v-model="OrdenActualizando.idcliente" type="number" />
+          <el-form-item label="Proveedor" prop="proveedor">
+            <el-input v-model="OrdenActualizando.proveedor" type="text" />
           </el-form-item>
-          <el-form-item label="Id del Tecnico" prop="idtecnico">
-            <el-input v-model="OrdenActualizando.idtecnico" type="number" />
+          <el-form-item label="Contacto de proveedor" prop="contactoproveedor">
+            <el-input v-model="OrdenActualizando.contactoproveedor" type="text" />
           </el-form-item>
-          <el-form-item label="Fecha Inicio" prop="startdate">
-            <el-date-picker v-model="OrdenActualizando.startdate" type="datetime" placeholder="Please pick a date" />
+          <el-form-item label="Unidad" prop="unidad">
+            <el-input v-model="OrdenActualizando.unidad" type="text" />
           </el-form-item>
-          <el-form-item label="Fecha Fin" prop="enddate">
-            <el-date-picker v-model="OrdenActualizando.enddate" type="datetime" placeholder="Please pick a date" />
-          </el-form-item>
-          <el-form-item label="Estado" prop="estado">
+          <!-- <el-form-item label="Estado" prop="estado">
             <el-select v-model="OrdenActualizando.estado" class="filter-item" placeholder="Seleccionar el estado">
               <el-option v-for="item in tipos_de_estado" :key="item.key" :label="item.display_name" :value="item.key" />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="ordenesFormVisible = false">
@@ -128,16 +125,16 @@ import Resource from '@/api/resource';
 import waves from '@/directive/waves'; // Waves directive
 import { parseTime } from '@/utils';
 
-const ordenesResource = new Resource('ordendetrabajo');
-const tipos_de_estado = [
-  { key: '1', display_name: 'En Proceso' },
-  { key: '2', display_name: 'Termianda' },
-  { key: '3', display_name: 'Suspendida' },
-  { key: '4', display_name: 'Archivada' },
-];
+const materialesResource = new Resource('materiales');
+// const tipos_de_estado = [
+//   { key: '1', display_name: 'En Proceso' },
+//   { key: '2', display_name: 'Termianda' },
+//   { key: '3', display_name: 'Suspendida' },
+//   { key: '4', display_name: 'Archivada' },
+// ];
 
 export default {
-  name: 'OrdenesTrabajaoList',
+  name: 'MaterialesList',
   directives: { waves },
   filters: {
     statusFilter(estado) {
@@ -155,62 +152,16 @@ export default {
       list: [],
       tableKey: 0,
       formTitle: '',
-      tipos_de_estado,
+      // tipos_de_estado,
       loading: true,
       ordenesFormVisible: false,
-      currentOrden: {},
+      currentMaterial: {},
       OrdenActualizando: {},
       downloadLoading: false,
-      showporcentaje: false,
-      showtecnico: false,
-      showestado: true,
+      // showporcentaje: false,
+      // showtecnico: false,
+      // showestado: true,
     };
-  },
-  computed: {
-    _startVal() {
-      if (this.setStartVal) {
-        return this.setStartVal;
-      } else {
-        return 0;
-      }
-    },
-    _endVal() {
-      if (this.setEndVal) {
-        return this.setEndVal;
-      } else {
-        return 0;
-      }
-    },
-    _duration() {
-      if (this.setDuration) {
-        return this.setDuration;
-      } else {
-        return 100;
-      }
-    },
-    _decimals() {
-      if (this.setDecimals) {
-        if (this.setDecimals < 0 || this.setDecimals > 20) {
-          alert('digits argument must be between 0 and 20');
-          return 0;
-        }
-        return this.setDecimals;
-      } else {
-        return 0;
-      }
-    },
-    _separator() {
-      return this.setSeparator;
-    },
-    _suffix() {
-      return this.setSuffix;
-    },
-    _prefix() {
-      return this.setPrefix;
-    },
-    _pauseResumeLabel() {
-      return this.paused ? this.resumeLabel : this.pauseLabel;
-    },
   },
   created() {
     this.getList();
@@ -218,30 +169,21 @@ export default {
   methods: {
     async getList() {
       this.loading = true;
-      const { data } = await ordenesResource.list({});
+      const { data } = await materialesResource.list({});
       this.list = data;
+      console.log(this.list);
       this.loading = false;
     },
     handleEditForm(id) {
-      this.formTitle = 'Editando una Orden de trabajo, con ID: ' + id;
-      this.currentOrden = this.list.find(ordenes => ordenes.id === id);
+      this.formTitle = 'Editando un Material, con ID: ' + id;
+      this.currentMaterial = this.list.find(ordenes => ordenes.id === id);
       this.OrdenActualizando = {
-        'color': this.currentOrden.color,
-        'created_at': this.currentOrden.created_at,
-        'deleted_at': this.currentOrden.deleted_at,
-        'description': this.currentOrden.description,
-        'direccion': this.currentOrden.direccion,
-        'estado': this.currentOrden.estado,
-        'id': this.currentOrden.id,
-        'idcliente': this.currentOrden.idcliente,
-        'idconexion': this.currentOrden.idconexion,
-        'idtecnico': this.currentOrden.idtecnico,
-        'newconexion': this.currentOrden.newconexion,
-        'observacion': this.currentOrden.observacion,
-        'porcent': this.currentOrden.porcent,
-        'startdate': this.currentOrden.startdate,
-        'enddate': this.currentOrden.enddate,
-        'updated_at': this.currentOrden.updated_at,
+        'id': this.currentMaterial.id,
+        'descripcion': this.currentMaterial.descripcion,
+        'stock': this.currentMaterial.stock,
+        'proveedor': this.currentMaterial.proveedor,
+        'contactoproveedor': this.currentMaterial.contactoproveedor,
+        'unidad': this.currentMaterial.unidad,
       };
       console.log('la copia:');
       console.log(this.OrdenActualizando);
@@ -250,7 +192,7 @@ export default {
     handleSubmit() {
       if (this.OrdenActualizando.id !== undefined) { // modificar orden
         console.log('por actualizar');
-        ordenesResource.update(this.OrdenActualizando.id, this.OrdenActualizando).then(response => {
+        materialesResource.update(this.OrdenActualizando.id, this.OrdenActualizando).then(response => {
           this.$message({
             type: 'success',
             message: 'La orden ha sido actualizada correctamente',
@@ -264,31 +206,29 @@ export default {
           this.ordenesFormVisible = false;
         });
       } else { // crear nueva orden
-        ordenesResource
+        materialesResource
           .store(this.OrdenActualizando)
           .then(response => {
             this.$message({
-              message: 'Se creó la tarea: ' + this.OrdenActualizando.description + ', correctamente. Gracias',
+              message: 'Se creó el nuevo material: ' + this.OrdenActualizando.descripcion + ', correctamente. Gracias',
               type: 'success',
               duration: 5 * 1000,
             });
-            this.currentOrden = {
+            this.OrdenActualizando = {
+              id: '',
               description: '',
-              direccion: '',
-              idcliente: '',
-              idtecnico: '',
-              startdate: '',
-              enddate: '',
-              estado: '',
+              stock: '',
+              proveedor: '',
+              contactoproveedor: '',
+              unidad: '',
             };
             this.OrdenActualizando = {
+              id: '',
               description: '',
-              direccion: '',
-              idcliente: '',
-              idtecnico: '',
-              startdate: '',
-              enddate: '',
-              estado: '',
+              stock: '',
+              proveedor: '',
+              contactoproveedor: '',
+              unidad: '',
             };
             this.ordenesFormVisible = false;
             this.getList();
@@ -300,31 +240,34 @@ export default {
     },
     handleCreate() {
       this.ordenesFormVisible = true;
-      this.currentOrden = {
+      this.OrdenActualizando = {
+        id: '',
         description: '',
-        direccion: '',
-        idcliente: '',
+        stock: '',
+        proveedor: '',
+        contactoproveedor: '',
+        unidad: '',
       };
     },
     handleDownload() {
       this.downloadLoading = true;
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['id', 'descripcion', 'estado'];
-        const filterVal = ['id', 'description', 'estado'];
+        const tHeader = ['id', 'descripcion', 'stock'];
+        const filterVal = ['id', 'descripcion', 'stock'];
         const data = this.formatJson(filterVal, this.list);
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table12-list',
+          filename: 'table25-list',
         });
         this.downloadLoading = false;
       });
     },
     handleModifyStatus(id) {
       // actualizo la base de datos
-      this.currentOrden = this.list.find(ordenes => ordenes.id === id);
-      this.currentOrden.porcent = 100;
-      ordenesResource.update(id, this.currentOrden).then(response => {
+      this.currentMaterial = this.list.find(ordenes => ordenes.id === id);
+      this.currentMaterial.porcent = 100;
+      materialesResource.update(id, this.currentMaterial).then(response => {
         this.$message({
           type: 'success',
           message: 'La orden ha se completó al 100%',
@@ -352,20 +295,18 @@ export default {
         }
       }));
     },
-    handleDelete(id, name, dir, idcliente) {
-      this.currentOrden = {
+    handleDelete(id, name) {
+      this.currentMaterial = {
         id: id,
         description: name,
-        direccion: dir,
-        idcliente: idcliente,
       };
-      console.log(this.currentOrden);
-      this.$confirm('Estas seguro de eliminar permanentemente la tarea ' + name + '. ?', 'Confirme', {
+      // console.log(this.currentMaterial);
+      this.$confirm('Estas seguro de eliminar permanentemente el material: ' + name + '. ?', 'Confirme', {
         confirmButtonText: 'Si, borrar',
         cancelButtonText: 'Cancelar',
         type: 'warning',
       }).then(() => {
-        ordenesResource.destroy(id).then(response => {
+        materialesResource.destroy(id).then(response => {
           this.$message({
             type: 'success',
             message: 'La tarea ha sido borrada correctamente',
@@ -384,3 +325,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.line{
+  text-align: center;
+}
+</style>
