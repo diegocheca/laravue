@@ -1,7 +1,7 @@
 <!-- File: resources/js/views/categories/List.vue -->
 <template>
   <div class="app-container">
-    <h1>Hoal estoy en materiales</h1>
+    <h1>Estoy en materiales</h1>
     <div class="filter-container">
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
@@ -83,6 +83,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="!loading" :total="total" />
     <el-dialog :title="formTitle" :visible.sync="ordenesFormVisible">
       <div class="form-container">
         <el-form ref="categoryForm" :model="OrdenActualizando" label-position="left" label-width="150px" style="max-width: 500px;">
@@ -124,6 +125,7 @@
 import Resource from '@/api/resource';
 import waves from '@/directive/waves'; // Waves directive
 import { parseTime } from '@/utils';
+import Pagination from '@/components/Pagination';
 
 const materialesResource = new Resource('materiales');
 // const tipos_de_estado = [
@@ -135,6 +137,7 @@ const materialesResource = new Resource('materiales');
 
 export default {
   name: 'MaterialesList',
+  components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(estado) {
@@ -161,6 +164,15 @@ export default {
       // showporcentaje: false,
       // showtecnico: false,
       // showestado: true,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: '+id',
+      },
     };
   },
   created() {
@@ -172,6 +184,7 @@ export default {
       const { data } = await materialesResource.list({});
       this.list = data;
       console.log(this.list);
+      this.total = this.list.length;
       this.loading = false;
     },
     handleEditForm(id) {
