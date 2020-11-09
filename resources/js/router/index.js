@@ -185,6 +185,15 @@ export const constantRoutes = [
           icon: 'table',
         },
       },
+      {
+        path: 'materiales',
+        component: () => import('@/views/materiales/materialesLista.vue'),
+        name: 'ListaDeMateriales',
+        meta: {
+          title: 'Lista de materiales',
+          icon: 'table',
+        },
+      },
     ],
   },
   {
