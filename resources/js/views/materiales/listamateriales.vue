@@ -19,7 +19,7 @@
         {{ $t('table.Tecnico') }}
       </el-checkbox> -->
     </div>
-    <el-table :key="tableKey" v-loading="loading" :data="list" border fit highlight-current-row>
+    <el-table :key="tableKey" v-loading="loading" :data="pagina" border fit highlight-current-row>
       <el-table-column align="center" label="id " width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -83,7 +83,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="!loading" :total="total" />
+    <pagination v-show="!loading" :total="total" :page.sync="paginaNumero" :limit.sync="tamañoPagina" @pagination="paginacion" />
     <el-dialog :title="formTitle" :visible.sync="ordenesFormVisible">
       <div class="form-container">
         <el-form ref="categoryForm" :model="OrdenActualizando" label-position="left" label-width="150px" style="max-width: 500px;">
@@ -164,7 +164,6 @@ export default {
       // showporcentaje: false,
       // showtecnico: false,
       // showestado: true,
-      total: 0,
       listQuery: {
         page: 1,
         limit: 20,
@@ -173,6 +172,12 @@ export default {
         type: undefined,
         sort: '+id',
       },
+      lista: {
+      },
+      pagina: [],
+      total: 0,
+      tamañoPagina: 0,
+      paginaNumero: 0,
     };
   },
   created() {
@@ -185,6 +190,10 @@ export default {
       this.list = data;
       console.log(this.list);
       this.total = this.list.length;
+      this.lista.pagina1 = this.list.slice(0, 19);
+      this.pagina = this.lista.pagina1;
+      this.paginaNumero = 1;
+      this.tamañoPagina = 20;
       this.loading = false;
     },
     handleEditForm(id) {
@@ -334,6 +343,15 @@ export default {
           message: 'No se ha borrado la tarea',
         });
       });
+    },
+    // funcion para manejar el $emit del componente pagination
+    paginacion(val) {
+      console.log(val);
+      this.paginaNumero = val.limit;
+      this.paginaNumero = val.page;
+      const indexInf = (val.page - 1) * val.limit;
+      const indexSup = indexInf + val.limit - 1;
+      this.pagina = this.list.slice(indexInf, indexSup);
     },
   },
 };
