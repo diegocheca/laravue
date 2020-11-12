@@ -3,6 +3,7 @@
   <div class="app-container">
     <h1>Estoy en materiales</h1>
     <div class="filter-container">
+      <el-input v-model="filtro" :placeholder="placeHolderFilter" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
       </el-button>
@@ -19,7 +20,8 @@
         {{ $t('table.Tecnico') }}
       </el-checkbox> -->
     </div>
-    <el-table :key="tableKey" v-loading="loading" :data="pagina" border fit highlight-current-row>
+    <!-- antes en :data="pagina" -->
+    <el-table :key="tableKey" v-loading="loading" :data="filtrar" border fit highlight-current-row>
       <el-table-column align="center" label="id " width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
@@ -164,21 +166,25 @@ export default {
       // showporcentaje: false,
       // showtecnico: false,
       // showestado: true,
-      listQuery: {
-        page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id',
-      },
       lista: {
       },
       pagina: [],
       total: 0,
       tamañoPagina: 0,
       paginaNumero: 0,
+      filtro: '',
+      placeHolderFilter: 'Buscar...',
+      filtrado: [],
     };
+  },
+  computed: {
+    filtrar() {
+      if (!this.filtro) {
+        return this.pagina;
+      }
+      return this.list.filter(a =>
+        a.descripcion.toLowerCase().includes(this.filtro.toLowerCase()));
+    },
   },
   created() {
     this.getList();
@@ -347,7 +353,7 @@ export default {
     // funcion para manejar el $emit del componente pagination
     paginacion(val) {
       console.log(val);
-      this.paginaNumero = val.limit;
+      this.tamañoPagina = val.limit;
       this.paginaNumero = val.page;
       const indexInf = (val.page - 1) * val.limit;
       const indexSup = indexInf + val.limit - 1;
