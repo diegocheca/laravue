@@ -21,8 +21,16 @@
       </el-checkbox> -->
     </div>
     <!-- antes en :data="pagina" -->
-    <el-table :key="tableKey" v-loading="loading" :data="filtrar" border fit highlight-current-row>
-      <el-table-column align="center" label="id " width="80">
+    <el-table
+      :key="tableKey"
+      v-loading="loading"
+      :data="filtrar"
+      border
+      fit
+      highlight-current-row
+      @sort-change="sortChange"
+    >
+      <el-table-column prop="id" sortable="custom" align="center" label="id " width="80">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -358,6 +366,40 @@ export default {
       const indexInf = (val.page - 1) * val.limit;
       const indexSup = indexInf + val.limit - 1;
       this.pagina = this.list.slice(indexInf, indexSup);
+    },
+    sortChange(data) {
+      console.log('entra al metodo sort');
+      console.log(data);
+      const { prop, order } = data;
+      console.log(prop);
+      console.log(order);
+      if (prop === 'id') {
+        this.sortByID(order);
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        console.log('debe orderdenar ascendentemente');
+        this.pagina.sort((a, b) => {
+          if (a.id < b.id) {
+            return 1;
+          }
+          if (a.id > b.id) {
+            return -1;
+          }
+        });
+      } else {
+        console.log('debe orderdenar descendente');
+        this.pagina.sort((a, b) => {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+        });
+      }
+      // this.handleFilter();
     },
   },
 };
