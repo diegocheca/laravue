@@ -150,6 +150,7 @@ export default {
     Estado: 'Estado',
     Tecnico: 'Tecnico',
     EndTask: 'Terminar',
+    unidad: 'Unidades',
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

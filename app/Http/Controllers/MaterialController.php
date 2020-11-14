@@ -104,6 +104,12 @@ class MaterialController extends Controller
      * @param  \App\Laravue\Models\Material  $material
      * @return \Illuminate\Http\Response
      */
+
+    public function MaterialesEnOrdendes($id)
+    {
+        var_dump($id);
+    }
+
     public function edit(Material $material)
     {
         //

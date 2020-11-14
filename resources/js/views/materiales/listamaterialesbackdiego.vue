@@ -10,9 +10,10 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         {{ $t('table.export') }}
       </el-button>
-      <!-- <el-checkbox v-model="showporcentaje" label="procentaje" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.Porcentaje') }}
+      <el-checkbox v-model="showunidad" label="unidades" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('table.unidad') }}
       </el-checkbox>
+      <!--
       <el-checkbox v-model="showestado" label="estado" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.Estado') }}
       </el-checkbox>
@@ -67,7 +68,7 @@
           <span>{{ scope.row.contactoproveedor }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="unidad">
+      <el-table-column v-if="showunidad" align="center" label="unidad">
         <template slot-scope="scope">
           <span>{{ scope.row.unidad }}</span>
         </template>
@@ -81,15 +82,18 @@
       </el-table-column> -->
       <el-table-column align="center" label="Actions" width="350">
         <template slot-scope="scope">
+          <el-button type="info" size="small" icon="el-icon-edit" @click="handleUsadaDialog(scope.row.id, scope.row.descripcion);">
+            Usada en
+          </el-button>
           <el-button type="primary" size="small" icon="el-icon-edit" @click="handleEditForm(scope.row.id, scope.row.descripcion);">
             Edit
           </el-button>
           <el-button type="danger" size="small" icon="el-icon-delete" @click="handleDelete(scope.row.id, scope.row.descripcion);">
             Delete
           </el-button>
-          <el-button size="mini" type="info" @click="handleListaOrdenes(scope.row.id)">
-            Mas datos
-          </el-button>
+          <!-- <el-button v-if="scope.row.porcent!=100" size="mini" type="success" @click="handleModifyStatus(scope.row.id)">
+            {{ $t('table.EndTask') }}
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -128,18 +132,13 @@
         </div>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogOrdenesVisible" title="Lista de Ordendes Donde se uso">
-      <el-table :data="listOrdenes" border fit highlight-current-row style="width: 100%">
-        <el-table-column label="Id Orden Trabajo" align="center" width="95">
-          <template slot-scope="{row}">
-            <span class="link-type" @click="handleBuscarDatosdeOrden(row.ordentrabajo_id)">{{ row.ordentrabajo_id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column prop="id" label="Id Orden Trabajo" />
-        <el-table-column prop="cantidad" label="Cantidad Utilizada" />
+    <el-dialog title="Lista de Ordenes de Trabajo donde se uso" :visible.sync="usadaDialogVisible">
+      <el-table :datoos="informacionOrdendesMateriales" border fit highlight-current-row style="width: 100%">
+        <el-table-column prop="key" label="Channel" />
+        <el-table-column prop="pv" label="Pv" />
       </el-table>
       <span slot="footer" class="dialog-footer">
-        <el-button type="info" @click="dialogOrdenesVisible = false">Cerrar</el-button>
+        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -150,10 +149,8 @@ import Resource from '@/api/resource';
 import waves from '@/directive/waves'; // Waves directive
 import { parseTime } from '@/utils';
 import Pagination from '@/components/Pagination';
-import axios from 'axios';
 
 const materialesResource = new Resource('materiales');
-// const ordenestrabajomaterialesResource = new Resource('ordentrabajomaterial');
 // const tipos_de_estado = [
 //   { key: '1', display_name: 'En Proceso' },
 //   { key: '2', display_name: 'Termianda' },
@@ -179,28 +176,37 @@ export default {
   data() {
     return {
       list: [],
-      listOrdenes: [],
       tableKey: 0,
       formTitle: '',
       // tipos_de_estado,
       loading: true,
       ordenesFormVisible: false,
+      usadaDialogVisible: false,
       currentMaterial: {},
       OrdenActualizando: {},
       downloadLoading: false,
-      dialogOrdenesVisible: false,
-      // showporcentaje: false,
+      showunidad: false,
       // showtecnico: false,
       // showestado: true,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: '+id',
+      },
+      listQueryParaRelacion: {
+        id: 1,
+        sort: '+id',
+      },
       lista: {
       },
       pagina: [],
       total: 0,
       tamañoPagina: 0,
       paginaNumero: 0,
-      filtro: '',
-      placeHolderFilter: 'Buscar...',
-      filtrado: [],
+      informacionOrdendesMateriales: '',
     };
   },
   computed: {
@@ -228,6 +234,37 @@ export default {
       this.tamañoPagina = 20;
       this.loading = false;
     },
+    async handleUsadaDialog(id) {
+      /* fetchPv(pv).then(response => {
+        this.pvData = response.data.pvData;
+        this.dialogPvVisible = true;
+      });
+      informacionOrdendesMateriales
+      usadaDialogVisible*/
+      // this.listQueryParaRelacion.id = id;
+      // const { datoos } = await materialesResource.listaOrdendesMateriales(this.listQueryParaRelacion);
+      // this.informacionOrdendesMateriales = axios.get('http://localhost:8000/material-en-ordenes/'+id);
+      // console.log('la relacion:');
+      // console.log(this.informacionOrdendesMateriales);
+      /*
+      this.total = this.list.length;
+      this.lista.pagina1 = this.list.slice(0, 19);
+      this.pagina = this.lista.pagina1;
+      this.paginaNumero = 1;
+      this.tamañoPagina = 20;
+      this.loading = false;
+      this.OrdenActualizando = {
+        'id': this.currentMaterial.id,
+        'descripcion': this.currentMaterial.descripcion,
+        'stock': this.currentMaterial.stock,
+        'proveedor': this.currentMaterial.proveedor,
+        'contactoproveedor': this.currentMaterial.contactoproveedor,
+        'unidad': this.currentMaterial.unidad,
+      };
+      con1sole.log(this.OrdenActualizando);
+      this.ordenesFormVisible = true;
+      */
+    },
     handleEditForm(id) {
       this.formTitle = 'Editando un Material, con ID: ' + id;
       this.currentMaterial = this.list.find(ordenes => ordenes.id === id);
@@ -242,22 +279,6 @@ export default {
       console.log('la copia:');
       console.log(this.OrdenActualizando);
       this.ordenesFormVisible = true;
-    },
-    async handleListaOrdenes(id) {
-      this.loading = true;
-      const apiUrl = 'http://localhost:8000/trear_ordenes_materiales';
-      axios.get(`${apiUrl}/` + id)
-        .then(response => (this.listOrdenes = response.data))
-      ;
-      // this.listOrdenes = await .listaOrdendesMateriales(id); trear_ordenes_materiales
-      // this.listOrdenes = this.listOrdenes.data;
-      console.log('La lista es:\n');
-      console.log(this.listOrdenes);
-      this.loading = false;
-      this.dialogOrdenesVisible = true;
-    },
-    handleBuscarDatosdeOrden(id) {
-      alert('Aca van los datos de la orden' + id);
     },
     handleSubmit() {
       if (this.OrdenActualizando.id !== undefined) { // modificar orden

@@ -156,6 +156,8 @@ Route::apiResource('ordendetrabajo', 'OrdenTrabajoController');
 // api de materiales
 Route::apiResource('materiales', 'MaterialController'); // lo q es crear index, store, update y al delete
 
+// ordenes trabajo y materiales
+Route::apiResource('ordentrabajomaterial', 'OrdenTrabajoMaterialController');
 /*
 Route::get('/ordentrabajo', 'OrdenTrabajoController@all')->name('ordentrabajo.all');
 Route::post('/ordentrabajo', 'OrdenTrabajoController@store')->name('ordentrabajo.store');
