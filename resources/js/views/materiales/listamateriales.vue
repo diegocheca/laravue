@@ -35,13 +35,11 @@
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="descripcion" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.descripcion }}</span>
         </template>
       </el-table-column>
-
       <el-table-column align="center" label="stock" width="200">
         <template slot-scope="scope">
           <span>{{ scope.row.stock }}</span>
