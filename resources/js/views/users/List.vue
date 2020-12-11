@@ -276,6 +276,8 @@ export default {
       this.loading = true;
       const { data, meta } = await userResource.list(this.query);
       this.list = data;
+      console.log('mi lista es:\n');
+      console.log(this.list);
       this.list.forEach((element, index) => {
         element['index'] = (page - 1) * limit + index + 1;
       });

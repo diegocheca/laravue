@@ -161,6 +161,22 @@
           </el-button>
         </el-form-item>
       </el-tab-pane>
+      <el-tab-pane v-loading="updating" label="Password" name="fourth">
+        <el-form-item label="Email">
+          <el-input v-model="user.email" :disabled="user.role === 'admin'" />
+        </el-form-item>
+        <el-form-item label="Password">
+          <el-input v-model="user.password" :disabled="user.role === 'admin'" />
+        </el-form-item>
+        <el-form-item label="Confirm Password">
+          <el-input v-model="user.passwordconfirm" :disabled="user.role === 'admin'" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmitPass">
+            Update Password
+          </el-button>
+        </el-form-item>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -178,6 +194,8 @@ export default {
           name: '',
           email: '',
           avatar: '',
+          password: '',
+          passwordconfirm: '',
           roles: [],
         };
       },
@@ -193,6 +211,7 @@ export default {
         'https://cdn.laravue.dev/photo4.jpg',
       ],
       updating: false,
+      updatingpass: false,
     };
   },
   methods: {
@@ -200,6 +219,23 @@ export default {
       console.log('Switching tab ', tab, event);
     },
     onSubmit() {
+      this.updating = true;
+      userResource
+        .update(this.user.id, this.user)
+        .then(response => {
+          this.updating = false;
+          this.$message({
+            message: 'User information has been updated successfully',
+            type: 'success',
+            duration: 5 * 1000,
+          });
+        })
+        .catch(error => {
+          console.log(error);
+          this.updating = false;
+        });
+    },
+    onSubmitPass() {
       this.updating = true;
       userResource
         .update(this.user.id, this.user)

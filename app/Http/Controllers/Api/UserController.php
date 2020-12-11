@@ -127,6 +127,26 @@ class UserController extends BaseController
             return response()->json(['error' => 'Permission denied'], 403);
         }
 
+        
+        // mi codigo para actualizar passwords
+        if($request->get('password') != null && $request->get('passwordconfirm') != null && $request->get('password') == $request->get('passwordconfirm'))
+        {// significa que subo los password y los voy a actualizar
+            $email = $request->get('email');
+            $usuario = User::where('email', $email)->first();
+            //var_dump($usuario);
+            if($usuario != false)
+            {
+                $usuario->password = Hash::make($request->get('password'));
+                $usuario->save();
+            }
+            else  return response()->json(['error' => 'Email no encontrado'], 403);
+            
+        }
+        else{
+            echo "hago el otro codigo";
+        }
+        die();
+
         $validator = Validator::make($request->all(), $this->getValidationRules(false));
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 403);

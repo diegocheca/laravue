@@ -3,6 +3,7 @@
   <div class="app-container">
     <h1>Estoy en materiales</h1>
     <div class="filter-container">
+      <label>Filtrar:</label>
       <el-input v-model="filtro" :placeholder="placeHolderFilter" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">
         {{ $t('table.add') }}
@@ -16,9 +17,10 @@
       <el-checkbox v-model="showestado" label="estado" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
         {{ $t('table.Estado') }}
       </el-checkbox>
-      <el-checkbox v-model="showtecnico" label="tecnico" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        {{ $t('table.Tecnico') }}
-      </el-checkbox> -->
+      -->
+      <el-checkbox v-model="showunidad" label="Unidades" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
+        {{ $t('table.unidad') }}
+      </el-checkbox>
     </div>
     <!-- antes en :data="pagina" -->
     <el-table
@@ -65,7 +67,7 @@
           <span>{{ scope.row.contactoproveedor }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="unidad">
+      <el-table-column v-if="showunidad" align="center" label="unidad">
         <template slot-scope="scope">
           <span>{{ scope.row.unidad }}</span>
         </template>
@@ -197,6 +199,7 @@ export default {
       tamañoPagina: 0,
       paginaNumero: 0,
       filtro: '',
+      showunidad: false,
       placeHolderFilter: 'Buscar...',
       filtrado: [],
     };
