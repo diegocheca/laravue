@@ -166,8 +166,11 @@
           <el-input v-model="user.email" :disabled="user.role === 'admin'" />
         </el-form-item>
         <el-form-item label="Password">
-          <span class="show-pwd" @click="showPwd">
+          <span v-show="pwdType" class="show-pwd" @click="showPwd">
             <svg-icon icon-class="eye" />
+          </span>
+          <span v-show="!pwdType" class="show-pwd" @click="showPwd">
+            <svg-icon icon-class="eye-open" />
           </span>
           <el-input
             v-model="user.password"
@@ -177,8 +180,11 @@
           />
         </el-form-item>
         <el-form-item label="Confirm Password">
-          <span class="show-pwd" @click="showPwdConfirm">
+          <span v-show="pwdTypeConfirm" class="show-pwd" @click="showPwdConfirm">
             <svg-icon icon-class="eye" />
+          </span>
+          <span v-show="!pwdTypeConfirm" class="show-pwd" @click="showPwdConfirm">
+            <svg-icon icon-class="eye-open" />
           </span>
           <el-input
             v-model="user.passwordconfirm"
