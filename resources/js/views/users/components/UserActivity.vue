@@ -166,10 +166,26 @@
           <el-input v-model="user.email" :disabled="user.role === 'admin'" />
         </el-form-item>
         <el-form-item label="Password">
-          <el-input v-model="user.password" :disabled="user.role === 'admin'" />
+          <span class="show-pwd" @click="showPwd">
+            <svg-icon icon-class="eye" />
+          </span>
+          <el-input
+            v-model="user.password"
+            :disabled="user.role === 'admin'"
+            :type="pwdType"
+            placeholder="password"
+          />
         </el-form-item>
         <el-form-item label="Confirm Password">
-          <el-input v-model="user.passwordconfirm" :disabled="user.role === 'admin'" />
+          <span class="show-pwd" @click="showPwdConfirm">
+            <svg-icon icon-class="eye" />
+          </span>
+          <el-input
+            v-model="user.passwordconfirm"
+            :disabled="user.role === 'admin'"
+            :type="pwdTypeConfirm"
+            placeholder="confirm password"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmitPass">
@@ -212,9 +228,25 @@ export default {
       ],
       updating: false,
       updatingpass: false,
+      pwdType: 'password',
+      pwdTypeConfirm: 'password',
     };
   },
   methods: {
+    showPwd() {
+      if (this.pwdType === 'password') {
+        this.pwdType = '';
+      } else {
+        this.pwdType = 'password';
+      }
+    },
+    showPwdConfirm() {
+      if (this.pwdTypeConfirm === 'password') {
+        this.pwdTypeConfirm = '';
+      } else {
+        this.pwdTypeConfirm = 'password';
+      }
+    },
     handleClick(tab, event) {
       console.log('Switching tab ', tab, event);
     },
