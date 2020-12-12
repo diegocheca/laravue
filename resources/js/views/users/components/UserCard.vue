@@ -4,6 +4,7 @@
       <div class="user-avatar box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false" />
       </div>
+      <a type="warning" href="http://localhost:8000/#/components/avatar-upload"><span><svg-icon icon-class="people" />Change Avatar</span> </a>
       <div class="box-center">
         <div class="user-name text-center">
           {{ user.name }}

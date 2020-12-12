@@ -31,6 +31,7 @@
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           Sign in
         </el-button>
+        <a href="http://localhost:8000/#/register?redirect=%2Fdashboard" style="color:white">Registrar usuario nuevo</a>
       </el-form-item>
       <div class="tips">
         <span style="margin-right:20px;">Email: admin@laravue.dev</span>
