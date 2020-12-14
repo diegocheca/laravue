@@ -31,13 +31,47 @@
         <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">
           Sign in
         </el-button>
-        <a href="http://localhost:8000/#/register?redirect=%2Fdashboard" style="color:white">Registrar usuario nuevo</a>
+        <!-- <a href="http://localhost:8000/#/register?redirect=%2Fdashboard" style="color:white">Registrar usuario nuevo</a> -->
+      </el-form-item>
+      <el-form-item>
+        <el-button type="warning" icon="el-icon-plus" @click="handleCreate">
+          Nuevo usuario
+        </el-button>
       </el-form-item>
       <div class="tips">
         <span style="margin-right:20px;">Email: admin@laravue.dev</span>
         <span>Password: laravue</span>
       </div>
     </el-form>
+    <el-dialog :title="'Create new user'" :visible.sync="dialogFormVisible">
+      <div class="form-container">
+        <el-form ref="userForm" :rules="rules" :model="newUser" label-position="left" label-width="150px" style="max-width: 500px;">
+          <el-form-item label="Username" prop="name">
+            <el-input v-model="newUser.name" style="background-color:white" />
+          </el-form-item>
+          <hr>
+          <el-form-item label="Email" prop="email">
+            <el-input v-model="newUser.email" style="background-color:white" />
+          </el-form-item>
+          <hr>
+          <el-form-item label="Password" prop="password">
+            <el-input v-model="newUser.password" style="background-color:white" show-password />
+          </el-form-item>
+          <hr>
+          <el-form-item label="Confirmar Password" prop="confirmPassword">
+            <el-input v-model="newUser.confirmPassword" style="background-color:white" show-password />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">
+            Cancelar
+          </el-button>
+          <el-button type="primary" @click="createUser()">
+            Crear
+          </el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -45,11 +79,20 @@
 import LangSelect from '@/components/LangSelect';
 import { validEmail } from '@/utils/validate';
 import { csrf } from '@/api/auth';
+import UserResource from '@/api/user';
 
+const userResource = new UserResource();
 export default {
   name: 'Login',
   components: { LangSelect },
   data() {
+    var validateConfirmPassword = (rule, value, callback) => {
+      if (value !== this.newUser.password) {
+        callback(new Error('Password is mismatched!'));
+      } else {
+        callback();
+      }
+    };
     const validateEmail = (rule, value, callback) => {
       if (!validEmail(value)) {
         callback(new Error('Please enter the correct email'));
@@ -65,6 +108,7 @@ export default {
       }
     };
     return {
+      dialogFormVisible: false,
       loginForm: {
         email: 'admin@laravue.dev',
         password: 'laravue',
@@ -77,6 +121,17 @@ export default {
       pwdType: 'password',
       redirect: undefined,
       otherQuery: {},
+      newUser: {},
+      userCreating: false,
+      rules: {
+        name: [{ required: true, message: 'Name is required', trigger: 'blur' }],
+        email: [
+          { required: true, message: 'Email is required', trigger: 'blur' },
+          { type: 'email', message: 'Please input correct email address', trigger: ['blur', 'change'] },
+        ],
+        password: [{ required: true, message: 'Password is required', trigger: 'blur' }],
+        confirmPassword: [{ validator: validateConfirmPassword, trigger: 'blur' }],
+      },
     };
   },
   watch: {
@@ -92,6 +147,50 @@ export default {
     },
   },
   methods: {
+    resetNewUser() {
+      this.newUser = {
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        role: 'user',
+      };
+    },
+    handleCreate() {
+      this.resetNewUser();
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs['userForm'].clearValidate();
+      });
+    },
+    createUser() {
+      this.$refs['userForm'].validate((valid) => {
+        if (valid) {
+          this.newUser.roles = 'sin-aprobar';
+          this.userCreating = true;
+          userResource
+            .store(this.newUser)
+            .then(response => {
+              this.$message({
+                message: 'New user ' + this.newUser.name + '(' + this.newUser.email + ') has been created successfully.',
+                type: 'success',
+                duration: 5 * 1000,
+              });
+              this.resetNewUser();
+              this.dialogFormVisible = false;
+            })
+            .catch(error => {
+              console.log(error);
+            })
+            .finally(() => {
+              this.userCreating = false;
+            });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = '';

@@ -55,6 +55,7 @@ public function index()
 10- es rellenar de codigo de la function run del seeder.
 11- completar el model de laravel de la tabla q usamos , con los fillable and protected y softdeleted_at
 12 - crear direccion de vue , esto es un objeto js dentro del router/index.js
+
 13 - crear folder dentro de las views de js
 14 - crear el file con el nombre q se definio antes
 15 - probar el correcto funcionamiento de la vista mediante el menu de la izquierda
