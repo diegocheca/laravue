@@ -194,6 +194,7 @@
           />
         </el-form-item>
         <el-form-item>
+          <p> {{ samePasswords }} </p>
           <el-button type="primary" :disabled="user.role === 'admin'" @click="onSubmitPass">
             Update Password
           </el-button>
@@ -237,6 +238,15 @@ export default {
       pwdType: 'password',
       pwdTypeConfirm: 'password',
     };
+  },
+  computed: {
+    samePasswords() {
+      if (this.user.password === this.user.passwordconfirm) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   methods: {
     showPwd() {
