@@ -79,16 +79,35 @@ class UserController extends BaseController
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 403);
         } else {
-            $params = $request->all();
-            $user = User::create([
-                'name' => $params['name'],
-                'email' => $params['email'],
-                'password' => Hash::make($params['password']),
-            ]);
-            $role = Role::findByName($params['role']);
-            $user->syncRoles($role);
+            $estoylogueado = Auth::user();
+            if($estoylogueado == NULL)
+            {// el camino cuando registras desde el loguin
+                $params = $request->all();
+                $user = User::create([
+                    'name' => $params['name'],
+                    'email' => $params['email'],
+                    'password' => Hash::make($params['password']),
+                ]);
+                $role = Role::findByName("visitor");
+                $user->syncRoles($role);
 
-            return new UserResource($user);
+                return new UserResource($user);
+            }
+            else
+            {
+                //el camino del admin
+                $params = $request->all();
+                $user = User::create([
+                    'name' => $params['name'],
+                    'email' => $params['email'],
+                    'password' => Hash::make($params['password']),
+                ]);
+                $role = Role::findByName($params['role']);
+                $user->syncRoles($role);
+
+                return new UserResource($user);
+           }
+            
         }
     }
 

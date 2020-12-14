@@ -19,6 +19,7 @@ use \App\Laravue\Acl;
 */
 
 Route::namespace('Api')->group(function() {
+    Route::apiResource('userssinpermisos', 'UserController');
     Route::post('auth/login', 'AuthController@login');
     Route::group(['middleware' => 'auth:sanctum'], function () {
         // Auth routes
@@ -32,6 +33,7 @@ Route::namespace('Api')->group(function() {
         // Api resource routes
         Route::apiResource('roles', 'RoleController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::apiResource('users', 'UserController')->middleware('permission:' . Acl::PERMISSION_USER_MANAGE);
+        
         Route::apiResource('permissions', 'PermissionController')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
        
         // Custom routes

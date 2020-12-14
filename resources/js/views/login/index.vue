@@ -79,9 +79,9 @@
 import LangSelect from '@/components/LangSelect';
 import { validEmail } from '@/utils/validate';
 import { csrf } from '@/api/auth';
-import UserResource from '@/api/user';
+import Resource from '@/api/resource';
 
-const userResource = new UserResource();
+const userResource = new Resource('userssinpermisos');
 export default {
   name: 'Login',
   components: { LangSelect },
@@ -166,7 +166,7 @@ export default {
     createUser() {
       this.$refs['userForm'].validate((valid) => {
         if (valid) {
-          this.newUser.roles = 'sin-aprobar';
+          this.newUser.roles = ['sin-aprobar'];
           this.userCreating = true;
           userResource
             .store(this.newUser)
