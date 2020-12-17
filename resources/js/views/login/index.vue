@@ -46,20 +46,20 @@
     <el-dialog :title="'Create new user'" :visible.sync="dialogFormVisible">
       <div class="form-container">
         <el-form ref="userForm" :rules="rules" :model="newUser" label-position="left" label-width="150px" style="max-width: 500px;">
-          <el-form-item label="Username" prop="name">
-            <el-input v-model="newUser.name" style="background-color:white" />
+          <el-form-item class="form-item" label="Username" prop="name">
+            <el-input id="input-modal-name" v-model="newUser.name" class="form-input" />
           </el-form-item>
           <hr>
-          <el-form-item label="Email" prop="email">
-            <el-input v-model="newUser.email" style="background-color:white" />
+          <el-form-item class="form-item" label="Email" prop="email">
+            <el-input id="input-modal-email" v-model="newUser.email" class="form-input" />
           </el-form-item>
           <hr>
-          <el-form-item label="Password" prop="password">
-            <el-input v-model="newUser.password" style="background-color:white" show-password />
+          <el-form-item class="form-item" label="Password" prop="password">
+            <el-input id="input-modal-password" v-model="newUser.password" show-password class="form-input" />
           </el-form-item>
           <hr>
-          <el-form-item label="Confirmar Password" prop="confirmPassword">
-            <el-input v-model="newUser.confirmPassword" style="background-color:white" show-password />
+          <el-form-item class="form-item" label="Confirmar Password" prop="confirmPassword">
+            <el-input id="input-modal-confirmPassword" v-model="newUser.confirmPassword" show-password class="form-input" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -322,6 +322,7 @@ $light_gray:#eee;
     right: 35px;
   }
 }
+
 @media screen and (orientation:landscape) and (max-width:1024px) {
   .login-container {
     position: relative;
@@ -333,5 +334,16 @@ $light_gray:#eee;
       margin: auto;
     }
   }
+}
+</style>
+<style scoped>
+.form-item {
+  background-color: white;
+}
+.form-input {
+  border: 1px solid darkgrey;
+}
+#input-modal-name, #input-modal-email #input-modal-password, #input-modal-confirmPassword {
+  color: black !important;
 }
 </style>
