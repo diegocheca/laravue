@@ -15,6 +15,7 @@ use App\Laravue\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class AuthController
@@ -27,6 +28,7 @@ class AuthController extends BaseController
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
+    use LogsActivity;
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');

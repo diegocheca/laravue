@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,10 @@ Route::get('/', function () {
 Route::get('/hola', function () {
     Log::info('A user has arrived at the welcome page.');
     Log::alert('This page was loaded', ['user' => 3, 'previous_page' => 'www.google.com']);
-    return view('welcome');
+    activity('Import')->log('Look mum, I logged something');
+    return Activity::all();
+    
+    //return view('welcome');
 });
 
 Route::group(['middleware' => 'web'], function () {
