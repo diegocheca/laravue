@@ -34,7 +34,7 @@
         <!-- <a href="http://localhost:8000/#/register?redirect=%2Fdashboard" style="color:white">Registrar usuario nuevo</a> -->
       </el-form-item>
       <el-form-item>
-        <el-button type="warning" icon="el-icon-plus" @click="handleCreate">
+        <el-button id="b-new-user" type="warning" icon="el-icon-plus" @click="handleCreate">
           Nuevo usuario
         </el-button>
       </el-form-item>
@@ -235,6 +235,28 @@ $bg:#2d3a4b;
 $light_gray:#eee;
 
 /* reset element-ui css */
+.v-modal {
+  opacity: 0;
+}
+#b-new-user {
+  width: 100%;
+}
+.el-dialog {
+  .el-input {
+    #input-modal-name{
+      color: black;
+    }
+    #input-modal-email {
+      color: black;
+    }
+    #input-modal-password {
+      color: black;
+    }
+    #input-modal-confirmPassword {
+      color: black;
+    }
+  }
+}
 .login-container {
   .el-input {
     display: inline-block;
@@ -342,8 +364,9 @@ $light_gray:#eee;
 }
 .form-input {
   border: 1px solid darkgrey;
+  color: black !important;
 }
-#input-modal-name, #input-modal-email #input-modal-password, #input-modal-confirmPassword {
+#input-modal-email, #input-modal-password, #input-modal-confirmPassword {
   color: black !important;
 }
 </style>
