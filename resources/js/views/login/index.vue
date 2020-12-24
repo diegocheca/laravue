@@ -47,7 +47,7 @@
       <div class="form-container">
         <el-form ref="userForm" :rules="rules" :model="newUser" label-position="left" label-width="150px" style="max-width: 500px;">
           <el-form-item class="form-item" label="Username" prop="name">
-            <el-input id="input-modal-name" v-model="newUser.name" class="form-input" />
+            <el-input id="input-modal-name" v-model="newUser.name" class="miclase" />
           </el-form-item>
           <hr>
           <el-form-item class="form-item" label="Email" prop="email">
@@ -290,6 +290,9 @@ $light_gray:#eee;
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
+.miclase{
+  color: #33FF11;
+}
 .login-container {
   position: fixed;
   height: 100%;
