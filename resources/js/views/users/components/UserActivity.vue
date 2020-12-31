@@ -120,7 +120,13 @@
       <el-tab-pane label="Timeline" name="second">
         <div class="block">
           <el-timeline>
-            <el-timeline-item timestamp="2019/4/17" placement="top">
+            <el-timeline-item v-for="log in logs" :key="log.id" :timestamp="mostrar_fecha(log.created_at)" placement="top">
+              <el-card>
+                <h4>{{ log.tipo_log }}</h4>
+                <p>Se modifico la tabla: <strong>{{ log.tabla_modificada }} </strong> / por el usuairo: <strong>{{ log.created_by }}</strong> / con el estado: <strong> {{ log.estado }}</strong></p>
+              </el-card>
+            </el-timeline-item>
+            <!-- <el-timeline-item timestamp="2019/4/17" placement="top">
               <el-card>
                 <h4>Update Github template</h4>
                 <p>tuandm committed 2019/4/17 20:46</p>
@@ -144,7 +150,7 @@
                 </h4>
                 <p>tuandm deployed 2019/4/19 10:23</p>
               </el-card>
-            </el-timeline-item>
+            </el-timeline-item> -->
           </el-timeline>
         </div>
       </el-tab-pane>
@@ -207,6 +213,7 @@
 <script>
 import Resource from '@/api/resource';
 const userResource = new Resource('users');
+const activitiesResource = new Resource('activities');
 
 export default {
   props: {
@@ -233,6 +240,8 @@ export default {
         'https://cdn.laravue.dev/photo3.jpg',
         'https://cdn.laravue.dev/photo4.jpg',
       ],
+      logs: [],
+      total: 0,
       updating: false,
       updatingpass: false,
       pwdType: 'password',
@@ -248,7 +257,40 @@ export default {
       }
     },
   },
+  created() {
+    this.getLogs();
+  },
   methods: {
+    async getLogs() {
+      console.log('empezanod a traer los logs');
+      const { data } = await activitiesResource.list({});
+      this.logs = data;
+      this.total = this.logs.length;
+      console.log(this.logs);
+    },
+    mostrar_fecha(fecha_log) {
+      console.log(' fecha entera:' + fecha_log);
+      var anio = fecha_log.substring(0, 4);
+      var mes = fecha_log.substring(5, 7);
+      var dia = fecha_log.substring(8, 10);
+      var hora = fecha_log.substring(11, 13);
+      var minutos = fecha_log.substring(14, 16);
+      var segundos = fecha_log.substring(17, 19);
+      anio = parseInt(anio);
+      mes = parseInt(mes) - 1;
+      dia = parseInt(dia);
+      hora = parseInt(hora);
+      minutos = parseInt(minutos);
+      segundos = parseInt(segundos);
+      // console.log(' hora:' + hora);
+      // console.log(' minutos:' + minutos);
+      // console.log(' segundos:' + segundos);
+      // var fecha = new Date(parseInt(fecha_log.substring(0, 4)), parseInt(fecha_log.substring(5, 7)), parseInt(fecha_log.substring(8, 10)));
+      var fecha = new Date(anio, mes, dia, hora, minutos, segundos);
+      console.log(' fecha creada:' + fecha);
+      var options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+      return fecha.toLocaleDateString('es-ES', options);
+    },
     showPwd() {
       if (this.pwdType === 'password') {
         this.pwdType = '';

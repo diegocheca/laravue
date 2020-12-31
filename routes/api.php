@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Resources\UserResource;
+use App\Http\Resources\ActivitiesResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Laravue\Faker;
@@ -17,8 +18,11 @@ use \App\Laravue\Acl;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//logs
+Route::apiResource('activities', 'ActivitiesController');
 Route::namespace('Api')->group(function() {
+    
+
     Route::apiResource('userssinpermisos', 'UserController');
     Route::post('auth/login', 'AuthController@login');
     Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -41,6 +45,7 @@ Route::namespace('Api')->group(function() {
         Route::get('users/{user}/permissions', 'UserController@permissions')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
         Route::put('users/{user}/permissions', 'UserController@updatePermissions')->middleware('permission:' .Acl::PERMISSION_PERMISSION_MANAGE);
         Route::get('roles/{role}/permissions', 'RoleController@permissions')->middleware('permission:' . Acl::PERMISSION_PERMISSION_MANAGE);
+
     });
 });
 
